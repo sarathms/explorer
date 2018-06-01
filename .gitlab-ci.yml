@@ -10,7 +10,7 @@ start_review:
   stage: review
   script:
     - npm i -g --unsafe-perm now
-    - URL=$(now -t ${NOW_TOKEN} ./ -n ${REPO_NAME}-${CI_COMMIT_REF_SLUG} --public)
+    - URL=$(now -t ${NOW_TOKEN} ./ -n ${REPO_NAME}-${CI_COMMIT_REF_SLUG} --public --npm)
     - NOW_URL=$(echo ${URL} | sed s/'http:\/\/'/''/g | sed s/'https:\/\/'//g)
     - now -t ${NOW_TOKEN} alias set ${NOW_URL} ${REPO_NAME}-${CI_COMMIT_REF_SLUG}.now.sh
   environment:
