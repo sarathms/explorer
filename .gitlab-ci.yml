@@ -1,0 +1,37 @@
+image: node
+
+stages:
+  - review
+
+variables:
+  REPO_NAME: explorer
+
+start_review:
+  stage: review
+  script:
+    - npm i -g --unsafe-perm now
+    - URL=$(now -t ${NOW_TOKEN} ./ -n ${REPO_NAME}-${CI_COMMIT_REF_SLUG} --public)
+    - NOW_URL=$(echo ${URL} | sed s/'http:\/\/'/''/g | sed s/'https:\/\/'//g)
+    - now -t ${NOW_TOKEN} alias set ${NOW_URL} ${REPO_NAME}-${CI_COMMIT_REF_SLUG}.now.sh
+  environment:
+    name: review/$CI_BUILD_REF_NAME
+    url: https://$REPO_NAME-$CI_COMMIT_REF_SLUG.now.sh
+    on_stop: stop_review
+  only:
+    - branches
+  except:
+    - master
+
+stop_review:
+  stage: review
+  script:
+    - npm install -g now --silent
+    - now rm -t ${NOW_TOKEN} -y ${CI_COMMIT_REF_SLUG}
+  when: manual
+  environment:
+    name: review/$CI_BUILD_REF_NAME
+    action: stop
+  only:
+    - branches
+  except:
+    - master
