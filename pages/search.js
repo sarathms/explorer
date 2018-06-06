@@ -1,6 +1,6 @@
 import React from 'react'
 import Head from 'next/head'
-import Router from 'next/router'
+import Router, { withRouter } from 'next/router'
 
 import axios from 'axios'
 
@@ -78,6 +78,7 @@ const ErrorBox = ({error}) => {
   )
 }
 
+@withRouter
 export default class Search extends React.Component {
   static async getInitialProps ({ query }) {
     let msmtR, testNamesR, countriesR
@@ -121,16 +122,16 @@ export default class Search extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      testNameFilter: props.url.query.test_name,
-      inputFilter: props.url.query.input,
-      countryFilter: props.url.query.probe_cc,
-      asnFilter: props.url.query.probe_asn,
-      sinceFilter: props.url.query.since,
-      untilFilter: props.url.query.until,
+      testNameFilter: props.router.query.test_name,
+      inputFilter: props.router.query.input,
+      countryFilter: props.router.query.probe_cc,
+      asnFilter: props.router.query.probe_asn,
+      sinceFilter: props.router.query.since,
+      untilFilter: props.router.query.until,
       results: props.results,
       nextURL: props.nextURL,
 
-      onlyFilter: props.url.query.only || 'all',
+      onlyFilter: props.router.query.only || 'all',
 
       search: null,
       error: props.error,
@@ -215,7 +216,7 @@ export default class Search extends React.Component {
     this.setState({
       loading: true
     })
-    const query = {...this.props.url.query, only: value}
+    const query = {...this.props.router.query, only: value}
     Router.push({
       pathname: '/search',
       query
@@ -245,7 +246,7 @@ export default class Search extends React.Component {
       ['sinceFilter', 'since'],
       ['untilFilter', 'until'],
     ]
-    let query = {...this.props.url.query}
+    let query = {...this.props.router.query}
     mappings.forEach((m) => {
       if (!this.state[m[0]] || this.state[m[0]] === 'XX') {
         // If it's unset or marked as XX, let's be sure the path is clean
