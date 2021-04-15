@@ -1,4 +1,10 @@
 {
+  "assignees": [
+    "sarathms"
+  ],
+  "prConcurrentLimit": 2,
+  "prCreation": "not-pending",
+  "prHourlyLimit": 1,
   "extends": [
     "config:base"
   ]
