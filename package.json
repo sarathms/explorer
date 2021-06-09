@@ -6,7 +6,7 @@
   "main": "index.js",
   "repository": "https://github.com/ooni/explorer",
   "dependencies": {
-    "@babel/core": "7.4.4",
+    "@babel/core": "7.14.5",
     "@datapunt/matomo-tracker-react": "^0.3.1",
     "@nivo/bar": "^0.62.0",
     "@nivo/calendar": "^0.62.0",
