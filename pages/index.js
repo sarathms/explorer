@@ -137,11 +137,16 @@ export default class LandingPage extends React.Component {
 
   static async getInitialProps () {
     const client = axios.create({baseURL: process.env.NEXT_PUBLIC_MEASUREMENTS_URL}) // eslint-disable-line
-    const result = await client.get('/api/_/global_overview')
-    return {
-      measurementCount: result.data.measurement_count,
-      asnCount: result.data.network_count,
-      countryCount: result.data.country_count
+    try {
+      const result = await client.get('/api/_/global_overview')
+      return {
+        measurementCount: result.data.measurement_count,
+        asnCount: result.data.network_count,
+        countryCount: result.data.country_count
+      }
+    } catch(e) {
+      console.log(`Request failed: ${e.message}`)
+      throw new Error('/api/_/global_overview request failed')
     }
   }
 
