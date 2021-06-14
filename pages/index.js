@@ -151,9 +151,9 @@ export default class LandingPage extends React.Component {
 
   render () {
     let {
-      measurementCount,
-      asnCount,
-      countryCount
+      measurementCount = '...',
+      asnCount = '...',
+      countryCount = '...'
     } = this.props
 
     measurementCount = toCompactNumberUnit(measurementCount)

@@ -15,17 +15,6 @@ const handle = app.getRequestHandler()
 
 const server = express()
 
-const sourcemapsForSentryOnly = token => (req, res, next) => {
-  // In production we only want to serve source maps for sentry
-  if (!dev && !!token && req.headers['x-sentry-token'] !== token) {
-    res
-      .status(401)
-      .send('Authentication access token is required to access the source map.')
-    return
-  }
-  next()
-}
-
 app.prepare()
   .then(() => {
     return new Promise((resolve) => {
@@ -35,11 +24,6 @@ app.prepare()
   })
   .then(() => {
     server.use(favicon(path.join(__dirname, 'public', 'static', 'images', 'favicons', 'favicon.ico')))
-
-    const { Sentry } = require('./utils/sentry')(app.buildId)
-    // This attaches request information to sentry errors
-    server.use(Sentry.Handlers.requestHandler())
-    server.get(/\.map$/, sourcemapsForSentryOnly(process.env.SENTRY_TOKEN))
 
     server.get('/country/:countryCode', (req, res) => {
       return app.render(req, res, '/country', req.params)
@@ -54,9 +38,6 @@ app.prepare()
     server.all('*', (req, res) => {
       return handle(req, res)
     })
-
-    // This handles errors if they are thrown before raching the app
-    server.use(Sentry.Handlers.errorHandler())
 
     server.listen(process.env.PORT, err => {
       if (err) {

@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import { MdFeedback } from 'react-icons/md'
 import { theme, Flex } from 'ooni-components'
 
-import sentry from '../utils/sentry'
 const { Sentry } = sentry()
 
 const StyledFeedbackButton = styled(Flex)`
